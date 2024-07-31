@@ -6,10 +6,10 @@ export const App = () => {
 	const [steps, setSteps] = useState(data);
 	const [activeIndex, setActiveIndex] = useState(0);
 	let isFirstStep = true;
-	let isLastStep = false;
 
 	const handleClickForward = () => {
 		if (activeIndex < 6) setActiveIndex((prev) => prev + 1);
+		if (activeIndex === 6) handleClickFirst();
 	};
 	const handleClickBack = () => {
 		if (activeIndex > 0) setActiveIndex((prev) => prev - 1);
@@ -17,11 +17,9 @@ export const App = () => {
 	const handleClickFirst = () => {
 		setActiveIndex(0);
 	};
+
 	if (activeIndex === 0) {
 		isFirstStep = true;
-	} else if (activeIndex === 6) {
-		isFirstStep = false;
-		isLastStep = true;
 	} else {
 		isFirstStep = false;
 	}
@@ -32,9 +30,7 @@ export const App = () => {
 				<h1>Инструкция по готовке пельменей</h1>
 				<div className={styles.steps}>
 					<div className={styles['steps-content']}>
-						{steps.map(({ id, content }, index) => {
-							return index === activeIndex && <p key={id}>{content}</p>;
-						})}
+						{steps[activeIndex].content}
 					</div>
 					<ul className={styles['steps-list']}>
 						{steps.map(({ id, title }, index) => {
@@ -69,15 +65,8 @@ export const App = () => {
 						>
 							Назад
 						</button>
-						<button
-							className={styles.button}
-							onClick={handleClickForward}
-							disabled={isLastStep}
-						>
-							Далее
-						</button>
-						<button className={styles.button} onClick={handleClickFirst}>
-							Начать сначала
+						<button className={styles.button} onClick={handleClickForward}>
+							{activeIndex === 6 ? 'Начать сначала' : 'Далее'}
 						</button>
 					</div>
 				</div>
